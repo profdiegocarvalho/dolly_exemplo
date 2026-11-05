@@ -1,0 +1,217 @@
+:root {
+  --primary-color: #000080;
+  --secondary-color: #F4F4F9;
+  --accent-color: #1a1a9e;
+  --text-main: #212529;
+  --text-muted: #6c757d;
+  --bg-page: #F4F4F9;
+  --bg-card: #ffffff;
+  --border-color: #dee2e6;
+  --badge-dps-bg: #dc3545;
+  --badge-dp-bg: #ffc107;
+  --badge-na-bg: #198754;
+  --badge-text-dark: #212529;
+  --badge-text-light: #ffffff;
+}
+
+body.dark-mode {
+  --primary-color: #4d4dff;
+  --secondary-color: #121214;
+  --accent-color: #6e6eff;
+  --text-main: #e1e1e6;
+  --text-muted: #a8a8b3;
+  --bg-page: #121214;
+  --bg-card: #202024;
+  --border-color: #323238;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.topbar {
+  background-color: #000080;
+  color: #ffffff;
+  padding: 0.85rem 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+.topbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.brand-subtitle {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.sidebar {
+  background-color: var(--bg-card);
+  border-right: 1px solid var(--border-color);
+  min-height: calc(100vh - 65px);
+  padding: 1rem 0;
+}
+
+.sidebar-header {
+  padding: 0.5rem 1.25rem 0.75rem;
+}
+
+.sidebar-nav .nav-link {
+  color: var(--text-main);
+  padding: 0.45rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-nav .nav-link:hover,
+.sidebar-nav .nav-link.active {
+  color: var(--primary-color);
+  background-color: rgba(0, 0, 128, 0.05);
+  border-left-color: var(--primary-color);
+}
+
+.main-content {
+  padding-bottom: 3rem;
+}
+
+.project-summary-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.control-panel {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+.btn-custom-nav {
+  margin-left: 0.35rem;
+}
+
+.table-section {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.table-header h3 {
+  color: var(--primary-color);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.table {
+  color: var(--text-main);
+  border-color: var(--border-color);
+  margin-bottom: 0;
+  font-size: 0.875rem;
+}
+
+.table thead th {
+  background-color: rgba(0, 0, 128, 0.04);
+  color: var(--text-main);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+body.dark-mode .table thead th {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.badge-dps {
+  background-color: var(--badge-dps-bg);
+  color: var(--badge-text-light);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.badge-dp {
+  background-color: var(--badge-dp-bg);
+  color: var(--badge-text-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.badge-na {
+  background-color: var(--badge-na-bg);
+  color: var(--badge-text-light);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.modal-der-content {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-der-body {
+  overflow: hidden;
+  position: relative;
+  background-color: #2b2b2b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: grab;
+}
+
+.modal-der-body:active {
+  cursor: grabbing;
+}
+
+.panzoom-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.der-img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  background-color: #ffffff;
+}
+
+@media (max-width: 767.98px) {
+  .sidebar {
+    min-height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    max-height: 200px;
+    overflow-y: auto;
+  }
+}

@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dicionário de Dados - Ragi Refrigerantes Ltda.</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-mode">
+  <header class="topbar">
+    <div class="topbar-content">
+      <div class="brand-group">
+        <h1 class="brand-title">Dicionário de Dados Corporativo</h1>
+        <span class="brand-subtitle">Ragi Refrigerantes Ltda. (Dolly)</span>
+      </div>
+      <div class="action-group">
+        <button id="themeToggleBtn" class="btn btn-outline-light btn-sm" type="button">Alternar Modo Escuro</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container-fluid layout-wrapper">
+    <div class="row">
+      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+        <div class="sidebar-header">
+          <span class="text-uppercase fw-bold text-muted small">Tabelas do Banco</span>
+        </div>
+        <ul class="nav flex-column sidebar-nav" id="sidebarLinks">
+          <li class="nav-item"><a class="nav-link" href="#tabela_usuario">usuario</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_cliente">cliente</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_endereco">endereco</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_fornecedor">fornecedor</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_categoria">categoria</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_produto">produto</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_lote">lote</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_preco_regiao">preco_regiao</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_promocao">promocao</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_pedido">pedido</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_item_pedido">item_pedido</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_item_pedido_lote">item_pedido_lote</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_nota_fiscal">nota_fiscal</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_conta_receber">conta_receber</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_pagamento">pagamento</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_entrega">entrega</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_comprovante_entrega">comprovante_entrega</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_estorno">estorno</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tabela_log_auditoria">log_auditoria</a></li>
+        </ul>
+      </nav>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+        <section class="card project-summary-card mb-4 mt-3">
+          <div class="card-body">
+            <h2 class="card-title h4">Identificação do Projeto de Modelagem de Banco de Dados</h2>
+            <div class="row mt-3">
+              <div class="col-lg-6">
+                <p><strong>Escopo:</strong> O banco de dados centralizado sustenta a operação industrial, armazém e distribuição B2B da fabricante Dolly. Contempla cadastro de clientes e tabelas de preço regionalizadas, catálogo e lotes de produtos sob rígido controle de validade (FEFO), controle transacional de pedidos, faturamento e contas a receber, gestão de rotas e entrega com canhoto digital, além de trilha de auditoria centralizada.</p>
+                <p><strong>Tecnologia SGBD:</strong> MySQL Server 8.0+ (Storage Engine InnoDB, UTF-8 mb4, Collation utf8mb4_0900_ai_ci).</p>
+              </div>
+              <div class="col-lg-6">
+                <p><strong>Orientador Acadêmico:</strong> Prof. Dr. Diego Marques de Carvalho</p>
+                <p><strong>Responsabilidades e Governança:</strong></p>
+                <ul class="list-unstyled mb-0 small">
+                  <li><strong>Data Owner (Representante do Cliente):</strong> Laerte Codonho</li>
+                  <li><strong>Data Steward Líder:</strong> Carlos Gomes de Souza Júnior</li>
+                  <li><strong>Data Steward Analista de Requisitos:</strong> Eduarda Amorim</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="control-panel mb-4 p-3 rounded">
+          <div class="row g-2 align-items-center">
+            <div class="col-md-6 col-lg-7">
+              <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar por tabela, atributo, descrição ou tipo...">
+            </div>
+            <div class="col-md-6 col-lg-5 text-md-end">
+              <a href="docs/Especificacao_Requisitos_Regras_Negocio_BD.pdf" class="btn btn-primary btn-custom-nav" target="_blank">Baixar Requisitos (PDF)</a>
+              <button type="button" class="btn btn-secondary btn-custom-nav" id="openDerModalBtn">Visualizar DER</button>
+            </div>
+          </div>
+        </section>
+
+        <div id="dictionaryContainer">
+
+          <section id="tabela_usuario" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: usuario</h3>
+              <p class="text-muted">Armazena os operadores do sistema, seus respectivos perfis hierárquicos e chaves de acesso com controle rigoroso de status.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_usuario</td>
+                    <td>Identificador primário sequencial do usuário corporativo.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Sistema / Interno</td>
+                    <td>Administrador</td>
+                  </tr>
+                  <tr>
+                    <td>nome</td>
+                    <td>Nome completo do colaborador operador do sistema.</td>
+                    <td>VARCHAR(100)</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-dp">[DP]</span></td>
+                    <td>Formulário de Acesso</td>
+                    <td>Administrador, Gerente</td>
+                  </tr>
+                  <tr>
+                    <td>login</td>
+                    <td>Nome exclusivo para autenticação corporativa.</td>
+                    <td>VARCHAR(100)</td>
+                    <td>NOT NULL, <strong>[UNIQUE]</strong> (uk_usuario_login)</td>
+                    <td><span class="badge-dp">[DP]</span></td>
+                    <td>Formulário de Acesso</td>
+                    <td>Administrador, Gerente</td>
+                  </tr>
+                  <tr>
+                    <td>senha_hash</td>
+                    <td>Hash seguro da credencial do usuário criptografado em Argon2id.</td>
+                    <td>VARCHAR(255)</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-dps">[DPS]</span></td>
+                    <td>Subsistema de Segurança</td>
+                    <td>Administrador</td>
+                  </tr>
+                  <tr>
+                    <td>perfil</td>
+                    <td>Nível de permissão operacional (RBAC).</td>
+                    <td>ENUM('Admin', 'Gerente', 'Operador')</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Governança / TI</td>
+                    <td>Administrador, Gerente</td>
+                  </tr>
+                  <tr>
+                    <td>ativo</td>
+                    <td>Flag indicador de usuário ativo (1) ou inativo (0).</td>
+                    <td>TINYINT</td>
+                    <td>NOT NULL, DEFAULT 1, <strong>[CHECK]</strong></td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Painel Administrativo</td>
+                    <td>Administrador</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_cliente" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: cliente</h3>
+              <p class="text-muted">Cadastro de pessoas físicas e clientes corporativos atacadistas, armazenando status e consentimento explícito LGPD.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_cliente</td>
+                    <td>Identificador primário único do cliente.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Cadastros B2B</td>
+                    <td>Admin, Gerente, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>nome</td>
+                    <td>Razão social ou nome completo do comprador corporativo.</td>
+                    <td>VARCHAR(150)</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-dp">[DP]</span></td>
+                    <td>Cadastro Comercial</td>
+                    <td>Admin, Gerente, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>email</td>
+                    <td>Endereço eletrônico para envio de notas e cobranças.</td>
+                    <td>VARCHAR(150)</td>
+                    <td>NULL, DEFAULT NULL</td>
+                    <td><span class="badge-dp">[DP]</span></td>
+                    <td>Cadastro Comercial</td>
+                    <td>Admin, Gerente, Comercial, Faturamento</td>
+                  </tr>
+                  <tr>
+                    <td>cpf_cnpj</td>
+                    <td>Número de cadastro nacional (CPF ou CNPJ) sem formatação.</td>
+                    <td>VARCHAR(14)</td>
+                    <td>NOT NULL, <strong>[UNIQUE]</strong> (uk_cliente_cpf_cnpj)</td>
+                    <td><span class="badge-dp">[DP]</span></td>
+                    <td>Validação Receita / Sintegra</td>
+                    <td>Admin, Gerente, Comercial, Financeiro</td>
+                  </tr>
+                  <tr>
+                    <td>telefone</td>
+                    <td>Telefone institucional para agendamento de descargas.</td>
+                    <td>VARCHAR(20)</td>
+                    <td>NULL, DEFAULT NULL</td>
+                    <td><span class="badge-dp">[DP]</span></td>
+                    <td>Cadastro Comercial</td>
+                    <td>Admin, Gerente, Logística, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>consent_lgpd</td>
+                    <td>Aceite registrado de conformidade com a LGPD (1=Sim, 0=Não).</td>
+                    <td>TINYINT</td>
+                    <td>NOT NULL, DEFAULT 0, <strong>[CHECK]</strong></td>
+                    <td><span class="badge-dp">[DP]</span></td>
+                    <td>Termo de Consentimento</td>
+                    <td>DPO, Admin, Jurídico</td>
+                  </tr>
+                  <tr>
+                    <td>data_consentimento</td>
+                    <td>Data e hora exata do registro do consentimento LGPD.</td>
+                    <td>DATETIME</td>
+                    <td>NULL, DEFAULT NULL, <strong>[CHECK]</strong></td>
+                    <td><span class="badge-dp">[DP]</span></td>
+                    <td>Termo de Consentimento</td>
+                    <td>DPO, Admin, Jurídico</td>
+                  </tr>
+                  <tr>
+                    <td>ativo</td>
+                    <td>Indicador de cadastro ativo (1) ou bloqueado (0).</td>
+                    <td>TINYINT</td>
+                    <td>NOT NULL, DEFAULT 1, <strong>[CHECK]</strong></td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Gestão Comercial</td>
+                    <td>Admin, Gerente, Comercial</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_endereco" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: endereco</h3>
+              <p class="text-muted">Locais de entrega e faturamento dos clientes, decompostos em conformidade com a Primeira Forma Normal (1FN).</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_endereco</td>
+                    <td>Identificador primário da localidade.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Cadastro de Clientes</td>
+                    <td>Admin, Comercial, Logística</td>
+                  </tr>
+                  <tr>
+                    <td>id_cliente</td>
+                    <td>Chave estrangeira vinculando o endereço ao cliente titular.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (cliente.id_cliente)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>cliente.id_cliente</td>
+                    <td>Admin, Comercial, Logística</td>
+                  </tr>
+                  <tr>
+                    <td>logradouro</td>
+                    <td>Avenida, rua, rodovia ou praça do destino de entrega.</td>
+                    <td>VARCHAR(200)</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-dp">[DP]</span></td>
+                    <td>Cadastro de Clientes / CEP API</td>
+                    <td>Admin, Comercial, Logística</td>
+                  </tr>
+                  <tr>
+                    <td>numero</td>
+                    <td>Número cadastral do imóvel ou lote logístico.</td>
+                    <td>VARCHAR(20)</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-dp">[DP]</span></td>
+                    <td>Cadastro de Clientes</td>
+                    <td>Admin, Comercial, Logística</td>
+                  </tr>
+                  <tr>
+                    <td>complemento</td>
+                    <td>Informações adicionais de entrega (galpão, doca, bloco).</td>
+                    <td>VARCHAR(100)</td>
+                    <td>NULL, DEFAULT NULL</td>
+                    <td><span class="badge-dp">[DP]</span></td>
+                    <td>Cadastro de Clientes</td>
+                    <td>Admin, Comercial, Logística</td>
+                  </tr>
+                  <tr>
+                    <td>bairro</td>
+                    <td>Bairro administrativo do ponto de entrega.</td>
+                    <td>VARCHAR(100)</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Cadastro de Clientes / CEP API</td>
+                    <td>Admin, Comercial, Logística</td>
+                  </tr>
+                  <tr>
+                    <td>cidade</td>
+                    <td>Município de entrega.</td>
+                    <td>VARCHAR(100)</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Cadastro de Clientes / CEP API</td>
+                    <td>Admin, Comercial, Logística</td>
+                  </tr>
+                  <tr>
+                    <td>uf</td>
+                    <td>Unidade federativa (sigla com 2 caracteres).</td>
+                    <td>CHAR(2)</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Cadastro de Clientes / CEP API</td>
+                    <td>Admin, Comercial, Logística</td>
+                  </tr>
+                  <tr>
+                    <td>cep</td>
+                    <td>Código postal formatado com 8 dígitos numéricos.</td>
+                    <td>CHAR(8)</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Cadastro de Clientes / CEP API</td>
+                    <td>Admin, Comercial, Logística</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_fornecedor" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: fornecedor</h3>
+              <p class="text-muted">Cadastro de indústrias e fornecedores homologados de matérias-primas e insumos de engarrafamento.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_fornecedor</td>
+                    <td>Identificador primário único do fornecedor.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Compras / Suprimentos</td>
+                    <td>Admin, Gerente, Suprimentos</td>
+                  </tr>
+                  <tr>
+                    <td>razao_social</td>
+                    <td>Nome empresarial formal da pessoa jurídica fornecedora.</td>
+                    <td>VARCHAR(150)</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Contratos / Sintegra</td>
+                    <td>Admin, Gerente, Suprimentos</td>
+                  </tr>
+                  <tr>
+                    <td>cnpj</td>
+                    <td>Cadastro Nacional de Pessoa Jurídica (14 dígitos).</td>
+                    <td>VARCHAR(14)</td>
+                    <td>NOT NULL, <strong>[UNIQUE]</strong> (uk_fornecedor_cnpj)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Receita Federal</td>
+                    <td>Admin, Gerente, Financeiro</td>
+                  </tr>
+                  <tr>
+                    <td>contato</td>
+                    <td>Nome do preposto ou telefone/e-mail comercial.</td>
+                    <td>VARCHAR(100)</td>
+                    <td>NULL, DEFAULT NULL</td>
+                    <td><span class="badge-dp">[DP]</span></td>
+                    <td>Cadastro de Fornecedor</td>
+                    <td>Admin, Suprimentos</td>
+                  </tr>
+                  <tr>
+                    <td>ativo</td>
+                    <td>Flag indicador de fornecedor homologado (1) ou inativo (0).</td>
+                    <td>TINYINT</td>
+                    <td>NOT NULL, DEFAULT 1, <strong>[CHECK]</strong></td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Gestão de Suprimentos</td>
+                    <td>Admin, Suprimentos</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_categoria" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: categoria</h3>
+              <p class="text-muted">Agrupamento mercantil de bebidas e produtos (ex: Refrigerantes PET, Latas, Linha Diet).</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_categoria</td>
+                    <td>Identificador primário sequencial da categoria.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Catálogo de Produtos</td>
+                    <td>Admin, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>nome</td>
+                    <td>Designação descritiva da classe de produtos.</td>
+                    <td>VARCHAR(100)</td>
+                    <td>NOT NULL, <strong>[UNIQUE]</strong> (uk_categoria_nome)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Marketing / Comercial</td>
+                    <td>Admin, Comercial, Operador</td>
+                  </tr>
+                  <tr>
+                    <td>ativo</td>
+                    <td>Estado de disponibilidade da categoria comercial.</td>
+                    <td>TINYINT</td>
+                    <td>NOT NULL, DEFAULT 1, <strong>[CHECK]</strong></td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Catálogo de Produtos</td>
+                    <td>Admin, Gerente</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_produto" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: produto</h3>
+              <p class="text-muted">Itens produzidos e comercializados pela empresa, centralizando especificações, fornecedor, preço base e saldo em armazém.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_produto</td>
+                    <td>Chave primária do produto acabado.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Engenharia de Produto</td>
+                    <td>Todos</td>
+                  </tr>
+                  <tr>
+                    <td>id_categoria</td>
+                    <td>Chave estrangeira vinculando o produto a sua linha comercial.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (categoria.id_categoria)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>categoria.id_categoria</td>
+                    <td>Admin, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>id_fornecedor</td>
+                    <td>Chave estrangeira do fornecedor homologado.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (fornecedor.id_fornecedor)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>fornecedor.id_fornecedor</td>
+                    <td>Admin, Suprimentos</td>
+                  </tr>
+                  <tr>
+                    <td>descricao</td>
+                    <td>Descrição detalhada e volume (Ex: Dolly Guaraná 2L).</td>
+                    <td>VARCHAR(200)</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Engenharia / Marketing</td>
+                    <td>Todos</td>
+                  </tr>
+                  <tr>
+                    <td>preco_tabela</td>
+                    <td>Valor monetário base de catálogo para balizamento de preços.</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (> 0)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Controladoria / Comercial</td>
+                    <td>Admin, Gerente, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>saldo_estoque</td>
+                    <td>Saldo físico disponível consolidado no armazém central.</td>
+                    <td>INT</td>
+                    <td>NOT NULL, DEFAULT 0, <strong>[CHECK]</strong> (>= 0)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Alimentado por Entradas e Baixas FEFO</td>
+                    <td>Admin, Estoque, Logística</td>
+                  </tr>
+                  <tr>
+                    <td>ativo</td>
+                    <td>Flag indicador de produto apto para venda comercial.</td>
+                    <td>TINYINT</td>
+                    <td>NOT NULL, DEFAULT 1, <strong>[CHECK]</strong></td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Gestão Comercial</td>
+                    <td>Admin, Gerente</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_lote" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: lote</h3>
+              <p class="text-muted">Unidade de controle de fabricação e validade para garantia sanitária (ANVISA) e ordenação estrita de expedição FEFO.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_lote</td>
+                    <td>Identificador sequencial do lote industrial.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Linha de Envase / PCP</td>
+                    <td>Admin, PCP, Armazém</td>
+                  </tr>
+                  <tr>
+                    <td>id_produto</td>
+                    <td>Identificador do produto associado ao lote.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (produto.id_produto)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>produto.id_produto</td>
+                    <td>Admin, PCP, Armazém</td>
+                  </tr>
+                  <tr>
+                    <td>numero_lote</td>
+                    <td>Código alfanumérico impresso nas embalagens.</td>
+                    <td>VARCHAR(50)</td>
+                    <td>NOT NULL, <strong>[UNIQUE]</strong> (com id_produto)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Automação de Fábrica</td>
+                    <td>Admin, PCP, Qualidade, Armazém</td>
+                  </tr>
+                  <tr>
+                    <td>quantidade_inicial</td>
+                    <td>Volume total fabricado e registrado no armazém.</td>
+                    <td>INT</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (> 0)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Ordem de Produção</td>
+                    <td>Admin, PCP, Armazém</td>
+                  </tr>
+                  <tr>
+                    <td>quantidade_atual</td>
+                    <td>Saldo restante para alocação de saída FEFO.</td>
+                    <td>INT</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (>= 0 e <= inicial)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Controle Transacional de Baixa</td>
+                    <td>Admin, Armazém</td>
+                  </tr>
+                  <tr>
+                    <td>data_fabricacao</td>
+                    <td>Data oficial de envase e conclusão do lote.</td>
+                    <td>DATE</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Controle de Qualidade</td>
+                    <td>Admin, Armazém, Qualidade</td>
+                  </tr>
+                  <tr>
+                    <td>data_validade</td>
+                    <td>Data de expiração sanitária; orienta a fila FEFO (ASC).</td>
+                    <td>DATE</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (> data_fabricacao)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Controle de Qualidade</td>
+                    <td>Admin, Armazém, Logística</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_preco_regiao" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: preco_regiao</h3>
+              <p class="text-muted">Tabela de precificação diferenciada por produto e estado da federação para cobertura de custos e tributos regionais.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_preco_regiao</td>
+                    <td>Chave primária do registro de precificação regional.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Controladoria</td>
+                    <td>Admin, Gerente Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>id_produto</td>
+                    <td>Produto contemplado na regra tarifária.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (produto.id_produto)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>produto.id_produto</td>
+                    <td>Admin, Gerente Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>uf</td>
+                    <td>Sigla da Unidade Federativa de destino da mercadoria.</td>
+                    <td>CHAR(2)</td>
+                    <td>NOT NULL, <strong>[UNIQUE]</strong> (com id_produto)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Tabela Tributária Estadual</td>
+                    <td>Admin, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>preco_vigente</td>
+                    <td>Valor monetário cobrado na respectiva UF.</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (> 0)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Comitê de Precificação</td>
+                    <td>Admin, Gerente, Comercial</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_promocao" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: promocao</h3>
+              <p class="text-muted">Campanhas promocionais temporárias com abatimentos percentuais aplicáveis sobre itens de pedidos autorizados.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_promocao</td>
+                    <td>Chave primária identificadora da campanha de desconto.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Marketing Comercial</td>
+                    <td>Admin, Gerente Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>descricao</td>
+                    <td>Nome comercial e condições da campanha promocional.</td>
+                    <td>VARCHAR(150)</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Marketing</td>
+                    <td>Admin, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>percentual_desconto</td>
+                    <td>Percentual a abater no preço do item (de 0 a 100).</td>
+                    <td>DECIMAL(5,2)</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (>= 0 e <= 100)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Política Comercial</td>
+                    <td>Admin, Gerente Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>data_inicio</td>
+                    <td>Data de início de vigência da promoção.</td>
+                    <td>DATE</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Calendário Comercial</td>
+                    <td>Admin, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>data_fim</td>
+                    <td>Data de encerramento da promoção.</td>
+                    <td>DATE</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (>= data_inicio)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Calendário Comercial</td>
+                    <td>Admin, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>ativo</td>
+                    <td>Indicador de campanha ativa (1) ou revogada (0).</td>
+                    <td>TINYINT</td>
+                    <td>NOT NULL, DEFAULT 1, <strong>[CHECK]</strong></td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Diretoria Comercial</td>
+                    <td>Admin, Gerente Comercial</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_pedido" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: pedido</h3>
+              <p class="text-muted">Registro central de ordens de vendas B2B, armazenando status transacional, localidade de entrega, totais e operador responsável.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_pedido</td>
+                    <td>Chave primária única do pedido comercial.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Vendas B2B</td>
+                    <td>Todos</td>
+                  </tr>
+                  <tr>
+                    <td>id_cliente</td>
+                    <td>Cliente titular solicitante da compra.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (cliente.id_cliente)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>cliente.id_cliente</td>
+                    <td>Admin, Comercial, Logística</td>
+                  </tr>
+                  <tr>
+                    <td>id_usuario</td>
+                    <td>Operador ou atendente responsável pelo lançamento da venda.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (usuario.id_usuario)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>usuario.id_usuario</td>
+                    <td>Admin, Comercial, Auditoria</td>
+                  </tr>
+                  <tr>
+                    <td>id_endereco</td>
+                    <td>Endereço validado para entrega física dos fardos.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (endereco(id_endereco, id_cliente))</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>endereco.id_endereco</td>
+                    <td>Admin, Logística, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>data_hora</td>
+                    <td>Carimbo de data e hora do registro inicial da compra.</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT CURRENT_TIMESTAMP</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Relógio do Servidor</td>
+                    <td>Admin, Comercial, Logística</td>
+                  </tr>
+                  <tr>
+                    <td>situacao</td>
+                    <td>Estado operacional do pedido no fluxo de processamento.</td>
+                    <td>ENUM('ABERTO', 'FINALIZADO', 'CANCELADO')</td>
+                    <td>NOT NULL, DEFAULT 'ABERTO'</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Máquina de Estados Operacional</td>
+                    <td>Admin, Comercial, Gerente</td>
+                  </tr>
+                  <tr>
+                    <td>forma_pagamento</td>
+                    <td>Condição financeira negociada (Ex: Boleto Bancário).</td>
+                    <td>VARCHAR(50)</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Acordo Comercial</td>
+                    <td>Admin, Financeiro, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>valor_total</td>
+                    <td>Montante consolidado dos itens faturados menos descontos.</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td>NOT NULL, DEFAULT 0.00, <strong>[CHECK]</strong> (>= 0)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Cálculo Consolidado dos Itens</td>
+                    <td>Admin, Financeiro, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>valor_desconto</td>
+                    <td>Abatimento total concedido na negociação do pedido.</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td>NOT NULL, DEFAULT 0.00, <strong>[CHECK]</strong> (>= 0)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Promoções e Alçadas de Desconto</td>
+                    <td>Admin, Financeiro, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>data_cancelamento</td>
+                    <td>Data e hora de cancelamento, quando aplicável.</td>
+                    <td>DATETIME</td>
+                    <td>NULL, DEFAULT NULL, <strong>[CHECK]</strong></td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Processo de Cancelamento/Estorno</td>
+                    <td>Admin, Gerente</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_item_pedido" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: item_pedido</h3>
+              <p class="text-muted">Linhas de produtos de cada pedido, com congelamento histórico do preço de venda praticado (RN04) e vínculo promocional.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_item</td>
+                    <td>Chave primária do item do pedido.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Inclusão de Pedido</td>
+                    <td>Admin, Comercial, Estoque</td>
+                  </tr>
+                  <tr>
+                    <td>id_pedido</td>
+                    <td>Pedido pai ao qual o produto pertence.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (pedido.id_pedido)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>pedido.id_pedido</td>
+                    <td>Admin, Comercial, Estoque</td>
+                  </tr>
+                  <tr>
+                    <td>id_produto</td>
+                    <td>Produto solicitado pelo cliente.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (produto.id_produto)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>produto.id_produto</td>
+                    <td>Admin, Comercial, Estoque</td>
+                  </tr>
+                  <tr>
+                    <td>id_promocao</td>
+                    <td>Campanha aplicada sobre a linha (quando houver).</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NULL, DEFAULT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>promocao.id_promocao</td>
+                    <td>Admin, Comercial</td>
+                  </tr>
+                  <tr>
+                    <td>quantidade</td>
+                    <td>Volume em fardos ou unidades comercializadas.</td>
+                    <td>INT</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (> 0)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Formulário de Venda</td>
+                    <td>Admin, Comercial, Estoque</td>
+                  </tr>
+                  <tr>
+                    <td>preco_unitario_venda</td>
+                    <td>Preço congelado no ato da venda (imune a mudanças de tabela).</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (> 0)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>preco_regiao / preco_tabela via Trigger</td>
+                    <td>Admin, Comercial, Faturamento</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_item_pedido_lote" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: item_pedido_lote</h3>
+              <p class="text-muted">Associação e rastreamento da separação física de estoque FEFO, vinculando o item de venda aos lotes industriais baixados.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_item_pedido_lote</td>
+                    <td>Identificador primário da alocação de estoque.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Rotina de Separação FEFO</td>
+                    <td>Admin, Armazém, Logística</td>
+                  </tr>
+                  <tr>
+                    <td>id_item</td>
+                    <td>Chave estrangeira do item de venda atendido.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (item_pedido.id_item)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>item_pedido.id_item</td>
+                    <td>Admin, Armazém</td>
+                  </tr>
+                  <tr>
+                    <td>id_lote</td>
+                    <td>Chave estrangeira do lote físico do armazém consumido.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (lote.id_lote)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>lote.id_lote</td>
+                    <td>Admin, Armazém, Qualidade</td>
+                  </tr>
+                  <tr>
+                    <td>id_produto</td>
+                    <td>Identificador redundante de validação de coerência.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (item_pedido e lote)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>produto.id_produto</td>
+                    <td>Admin, Armazém</td>
+                  </tr>
+                  <tr>
+                    <td>quantidade</td>
+                    <td>Quantidade física reservada e extraída deste lote específico.</td>
+                    <td>INT</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (> 0)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Coletor de Dados / Separação</td>
+                    <td>Admin, Armazém</td>
+                  </tr>
+                  <tr>
+                    <td>quantidade_estornada</td>
+                    <td>Saldo devolvido ao lote em caso de cancelamento parcial.</td>
+                    <td>INT</td>
+                    <td>NOT NULL, DEFAULT 0, <strong>[CHECK]</strong> (>= 0 e <= quantidade)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Processo de Devolução / Estorno</td>
+                    <td>Admin, Armazém, Gerente</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_nota_fiscal" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: nota_fiscal</h3>
+              <p class="text-muted">Registro corporativo de documentos fiscais gerados no faturamento, sob guarda obrigatória de 5 anos (Art. 195 CTN).</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_nota_fiscal</td>
+                    <td>Identificador interno sequencial da nota fiscal.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Módulo Fiscal / Faturamento</td>
+                    <td>Admin, Financeiro, Fiscal</td>
+                  </tr>
+                  <tr>
+                    <td>id_pedido</td>
+                    <td>Pedido de venda mercantil amarrado ao documento.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL, <strong>[UNIQUE]</strong> (uk_nf_pedido)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>pedido.id_pedido</td>
+                    <td>Admin, Financeiro, Fiscal</td>
+                  </tr>
+                  <tr>
+                    <td>chave_acesso</td>
+                    <td>Chave eletrônica de 44 dígitos representativa do documento.</td>
+                    <td>CHAR(44)</td>
+                    <td>NOT NULL, <strong>[UNIQUE]</strong> (uk_nf_chave)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Emissor Fiscal Eletrônico</td>
+                    <td>Admin, Financeiro, Fiscal, Logística</td>
+                  </tr>
+                  <tr>
+                    <td>valor_total_nf</td>
+                    <td>Valor monetário bruto emitido no documento fiscal.</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (> 0)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Total do Pedido</td>
+                    <td>Admin, Financeiro, Fiscal</td>
+                  </tr>
+                  <tr>
+                    <td>data_emissao</td>
+                    <td>Data e horário oficial de emissão fiscal.</td>
+                    <td>DATETIME</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Servidor Fiscal</td>
+                    <td>Admin, Financeiro, Fiscal</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_conta_receber" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: conta_receber</h3>
+              <p class="text-muted">Títulos financeiros e parcelas a liquidar decorrentes das vendas efetuadas, com controle de status e vencimento.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_conta</td>
+                    <td>Chave primária do título financeiro.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Faturamento / Contas a Receber</td>
+                    <td>Admin, Financeiro</td>
+                  </tr>
+                  <tr>
+                    <td>id_pedido</td>
+                    <td>Pedido mercantil que originou a obrigação financeira.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (pedido.id_pedido)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>pedido.id_pedido</td>
+                    <td>Admin, Financeiro</td>
+                  </tr>
+                  <tr>
+                    <td>numero_parcela</td>
+                    <td>Índice sequencial da parcela negociada (1, 2, 3...).</td>
+                    <td>INT</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (> 0)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Condição de Pagamento do Pedido</td>
+                    <td>Admin, Financeiro</td>
+                  </tr>
+                  <tr>
+                    <td>valor_parcela</td>
+                    <td>Valor monetário da parcela expressa no título.</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (> 0)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Desdobro do Pedido</td>
+                    <td>Admin, Financeiro</td>
+                  </tr>
+                  <tr>
+                    <td>data_vencimento</td>
+                    <td>Prazo limite para quitação da parcela sem incidência de juros.</td>
+                    <td>DATE</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Condição Comercial</td>
+                    <td>Admin, Financeiro</td>
+                  </tr>
+                  <tr>
+                    <td>status_parcela</td>
+                    <td>Situação atual de cobrança da parcela.</td>
+                    <td>ENUM('PENDENTE', 'PAGO', 'CANCELADO')</td>
+                    <td>NOT NULL, DEFAULT 'PENDENTE'</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Liquidação Financeira</td>
+                    <td>Admin, Financeiro</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_pagamento" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: pagamento</h3>
+              <p class="text-muted">Registro detalhado dos eventos de pagamento recebidos e compensados em favor da empresa.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_pagamento</td>
+                    <td>Chave primária do evento financeiro de quitação.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Gateway Bancário / Tesouraria</td>
+                    <td>Admin, Financeiro</td>
+                  </tr>
+                  <tr>
+                    <td>id_pedido</td>
+                    <td>Pedido quitado integral ou parcialmente.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (pedido.id_pedido)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>pedido.id_pedido</td>
+                    <td>Admin, Financeiro</td>
+                  </tr>
+                  <tr>
+                    <td>forma_pagamento</td>
+                    <td>Instrumento monetário utilizado para liquidação.</td>
+                    <td>ENUM('BOLETO', 'PIX', 'CARTAO')</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Comprovante de Pagamento</td>
+                    <td>Admin, Financeiro</td>
+                  </tr>
+                  <tr>
+                    <td>valor_pago</td>
+                    <td>Montante financeiro transferido e compensado.</td>
+                    <td>DECIMAL(10,2)</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (> 0)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Extrato Bancário</td>
+                    <td>Admin, Financeiro</td>
+                  </tr>
+                  <tr>
+                    <td>status_pagamento</td>
+                    <td>Estado de confirmação da operação na instituição financeira.</td>
+                    <td>ENUM('PENDENTE', 'CONFIRMADO', 'CANCELADO', 'ESTORNADO')</td>
+                    <td>NOT NULL, DEFAULT 'PENDENTE'</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Retorno Bancário / Conciliação</td>
+                    <td>Admin, Financeiro</td>
+                  </tr>
+                  <tr>
+                    <td>data_transacao</td>
+                    <td>Momento exato em que a compensação ocorreu.</td>
+                    <td>DATETIME</td>
+                    <td>NOT NULL, DEFAULT CURRENT_TIMESTAMP</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Log Bancário</td>
+                    <td>Admin, Financeiro</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_entrega" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: entrega</h3>
+              <p class="text-muted">Acompanhamento logístico do transporte de cargas, motorista escalado e prazos operacionais de descarregamento.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_entrega</td>
+                    <td>Chave primária do despacho de entrega.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Módulo de Expedição Logística</td>
+                    <td>Admin, Logística, Motorista</td>
+                  </tr>
+                  <tr>
+                    <td>id_pedido</td>
+                    <td>Pedido em rota de transporte rodoviário.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL, <strong>[UNIQUE]</strong> (uk_entrega_pedido)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>pedido.id_pedido</td>
+                    <td>Admin, Logística, Motorista</td>
+                  </tr>
+                  <tr>
+                    <td>id_usuario_motorista</td>
+                    <td>Usuário com credencial e perfil de motorista da frota.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (usuario.id_usuario)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>usuario.id_usuario</td>
+                    <td>Admin, Logística</td>
+                  </tr>
+                  <tr>
+                    <td>status_entrega</td>
+                    <td>Estágio logístico da carga no roteiro de transporte.</td>
+                    <td>ENUM('PENDENTE', 'EM ROTA', 'CONCLUIDA')</td>
+                    <td>NOT NULL, DEFAULT 'PENDENTE'</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Aplicativo de Transporte</td>
+                    <td>Admin, Logística, Motorista</td>
+                  </tr>
+                  <tr>
+                    <td>data_prevista</td>
+                    <td>Data máxima estipulada para descarga no cliente.</td>
+                    <td>DATE</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Roteirização</td>
+                    <td>Admin, Logística, Motorista</td>
+                  </tr>
+                  <tr>
+                    <td>data_realizada</td>
+                    <td>Carimbo de data e hora do descarregamento com sucesso.</td>
+                    <td>DATETIME</td>
+                    <td>NULL, DEFAULT NULL, <strong>[CHECK]</strong></td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Confirmação do Motorista</td>
+                    <td>Admin, Logística</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_comprovante_entrega" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: comprovante_entrega</h3>
+              <p class="text-muted">Registro do canhoto digital assinado pelo recebedor no ato da entrega para encerramento do ciclo do pedido (RF05).</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_comprovante</td>
+                    <td>Chave primária do comprovante digital de entrega.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>App Logístico Mobile</td>
+                    <td>Admin, Logística, Jurídico</td>
+                  </tr>
+                  <tr>
+                    <td>id_pedido</td>
+                    <td>Pedido atendido e formalmente aceito pelo cliente.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL, <strong>[UNIQUE]</strong> (uk_comprovante_pedido)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>entrega.id_pedido</td>
+                    <td>Admin, Logística, Jurídico</td>
+                  </tr>
+                  <tr>
+                    <td>assinatura_digital_canhoto</td>
+                    <td>Assinatura vetorial ou representação codificada do canhoto.</td>
+                    <td>TEXT</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-dp">[DP]</span></td>
+                    <td>Captura Touchscreen no Destino</td>
+                    <td>Admin, Logística, Jurídico</td>
+                  </tr>
+                  <tr>
+                    <td>data_registro</td>
+                    <td>Data e horário do upload do canhoto assinado.</td>
+                    <td>DATETIME</td>
+                    <td>NOT NULL, DEFAULT CURRENT_TIMESTAMP</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Servidor de Sincronismo Mobile</td>
+                    <td>Admin, Logística</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_estorno" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: estorno</h3>
+              <p class="text-muted">Registros de cancelamentos, devoluções de mercadorias e reversões operacionais para controle de qualidade e auditoria.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_estorno</td>
+                    <td>Chave primária do registro de cancelamento/estorno.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Módulo de SAC / Logística Reversa</td>
+                    <td>Admin, Gerente, Qualidade</td>
+                  </tr>
+                  <tr>
+                    <td>id_pedido</td>
+                    <td>Pedido de venda mercantil objeto da reversão.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL, <strong>[UNIQUE]</strong> (uk_estorno_pedido)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>pedido.id_pedido</td>
+                    <td>Admin, Gerente, Qualidade</td>
+                  </tr>
+                  <tr>
+                    <td>motivo</td>
+                    <td>Justificativa detalhada do cancelamento ou avaria.</td>
+                    <td>TEXT</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Laudo de Devolução</td>
+                    <td>Admin, Gerente, Qualidade</td>
+                  </tr>
+                  <tr>
+                    <td>data_estorno</td>
+                    <td>Carimbo de data e hora em que a reversão foi lançada.</td>
+                    <td>DATETIME</td>
+                    <td>NOT NULL, DEFAULT CURRENT_TIMESTAMP</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Servidor Central</td>
+                    <td>Admin, Gerente, Qualidade</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="tabela_log_auditoria" class="table-section mb-5">
+            <div class="table-header">
+              <h3 class="h5">Tabela: log_auditoria</h3>
+              <p class="text-muted">Trilha de auditoria centralizada para conformidade COBIT/DMBOK, armazenando diffs em JSON das alterações em tabelas sensíveis.</p>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Atributo</th>
+                    <th>Descrição / Regra de Negócio</th>
+                    <th>Tipo e Tamanho</th>
+                    <th>Constraints</th>
+                    <th>Privacidade</th>
+                    <th>Linhagem</th>
+                    <th>Controle de Acesso (RBAC)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>id_log</td>
+                    <td>Chave primária sequencial da ocorrência de auditoria.</td>
+                    <td>INT</td>
+                    <td><strong>[PK]</strong>, NOT NULL, AUTO_INCREMENT</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Gatilhos de Banco de Dados</td>
+                    <td>Admin, Auditoria, DPO</td>
+                  </tr>
+                  <tr>
+                    <td>id_usuario</td>
+                    <td>Chave estrangeira do operador responsável pela ação.</td>
+                    <td>INT</td>
+                    <td><strong>[FK]</strong>, NOT NULL (usuario.id_usuario)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>usuario.id_usuario</td>
+                    <td>Admin, Auditoria</td>
+                  </tr>
+                  <tr>
+                    <td>tabela_afetada</td>
+                    <td>Nome da entidade do banco que sofreu mutação.</td>
+                    <td>VARCHAR(100)</td>
+                    <td>NOT NULL</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Metadados do Trigger</td>
+                    <td>Admin, Auditoria</td>
+                  </tr>
+                  <tr>
+                    <td>operacao</td>
+                    <td>Comando DML disparador da auditoria.</td>
+                    <td>VARCHAR(20)</td>
+                    <td>NOT NULL, <strong>[CHECK]</strong> (INSERT, UPDATE, DELETE)</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Metadados do Trigger</td>
+                    <td>Admin, Auditoria</td>
+                  </tr>
+                  <tr>
+                    <td>data_hora</td>
+                    <td>Timestamp oficial de registro da operação no SGBD.</td>
+                    <td>TIMESTAMP</td>
+                    <td>NOT NULL, DEFAULT CURRENT_TIMESTAMP</td>
+                    <td><span class="badge-na">[N/A]</span></td>
+                    <td>Relógio do Servidor MySQL</td>
+                    <td>Admin, Auditoria</td>
+                  </tr>
+                  <tr>
+                    <td>valor_anterior</td>
+                    <td>Estado completo do registro antes da mutação em JSON.</td>
+                    <td>JSON</td>
+                    <td>NULL, DEFAULT NULL</td>
+                    <td><span class="badge-dps">[DPS]</span></td>
+                    <td>Snapshot do Registro Anterior</td>
+                    <td>Admin, Auditoria, DPO</td>
+                  </tr>
+                  <tr>
+                    <td>valor_novo</td>
+                    <td>Novo estado do registro persistido na base em JSON.</td>
+                    <td>JSON</td>
+                    <td>NULL, DEFAULT NULL</td>
+                    <td><span class="badge-dps">[DPS]</span></td>
+                    <td>Snapshot do Registro Atual</td>
+                    <td>Admin, Auditoria, DPO</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal fade" id="derModal" tabindex="-1" aria-labelledby="derModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content modal-der-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="derModalLabel">Diagrama Entidade-Relacionamento (DER) - FEFO Inventory Data Model</h5>
+          <div class="der-controls me-3">
+            <button type="button" class="btn btn-sm btn-outline-primary" id="btnZoomIn">Zoom +</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" id="btnZoomOut">Zoom -</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="btnZoomReset">Reset</button>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body modal-der-body">
+          <div id="panzoomContainer" class="panzoom-wrapper">
+            <img id="derImage" src="assets/der.png" alt="Diagrama Entidade Relacionamento" class="der-img">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
